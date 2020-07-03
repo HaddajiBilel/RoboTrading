@@ -1,0 +1,10 @@
+<nz-card>
+    <nz-radio-group [(ngModel)]="Window" (ngModelChange)="ngOnChanges($event)">
+        <label nz-radio-button nzValue="2620">10Y</label>
+        <label nz-radio-button nzValue="1260">5Y</label>
+        <label nz-radio-button nzValue="252">1Y</label>
+        <label nz-radio-button nzValue="162">6M</label>
+    </nz-radio-group>
+    <div echarts [options]="options" class="demo-chart"></div>
+
+</nz-card>

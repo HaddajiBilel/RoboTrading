@@ -1,0 +1,103 @@
+<nz-collapse>
+    <nz-collapse-panel nzHeader="Options" nzActive="true" nzExpandedIcon="setting">
+
+    <nz-card nzTitle="Model tuning" [nzExtra]="extraTemplate" >
+        
+        <div nz-row [nzGutter]="[16, 24]">
+            <div nz-col class="gutter-row" [nzSpan]="5">
+             <nz-input-group>
+                <h4> Available stocks </h4>
+                <nz-select [nzSize]="'large'" [(ngModel)]="selectedStock" (ngModelChange)="stockChange($event)" nzShowSearch nzAllowClear [nzDropdownRender]="AddTemplate" >
+                    <nz-option *ngFor="let stock of stocks" [nzValue]="stock" [nzLabel]="stock"></nz-option>
+                </nz-select>
+                <ng-template #AddTemplate>
+                    <nz-divider></nz-divider>
+                    <div class="container">
+                        <input type="text" nz-input #inputElement />
+                        <a class="add-item" (click)="addStock(inputElement.value)"><i nz-icon nzType="plus"></i>Add</a>
+                    </div>
+                </ng-template>
+                </nz-input-group>
+            </div>
+
+            <div nz-col class="gutter-row" [nzSpan]="5">
+                <h4> Models </h4>
+                    <nz-select  nzSize="large"  [(ngModel)]="selectedModel">
+                        <nz-option *ngFor="let S of models" [nzValue]="S" [nzLabel]="S"></nz-option>
+                    </nz-select>
+                
+            </div>
+            <div nz-col class="gutter-row" [nzSpan]="8">
+            <h4> Training inputs </h4>
+                <nz-select [nzSize]="'large'" [nzMaxTagCount]="16" nzMode="multiple" [(ngModel)]="listOfInput">
+                    <nz-option-group nzLabel="Indicators">
+                        <nz-option *ngFor="let item of listOfIndicators" [nzLabel]="item" [nzValue]="item"></nz-option>
+                    </nz-option-group>
+                </nz-select>
+            </div>
+
+            <div nz-col class="gutter-row" [nzSpan]="3">
+            <h4> Epochs </h4>
+            <nz-input-number [nzSize]="'large'" [nzMin]="1" [nzMax]="50" [nzStep]="1" [(ngModel)]="epochInput"></nz-input-number>   
+            </div>
+            
+            <div nz-col class="gutter-row" [nzSpan]="3">
+            <h4> Sequence length </h4>
+            <nz-input-number [nzSize]="'large'" [nzMin]="10" [nzMax]="100" [nzStep]="1" [(ngModel)]="sequenceInput"></nz-input-number>  
+            </div>
+
+            <div nz-col class="gutter-row" [nzSpan]="3">
+            <h4> Batch size </h4>
+            <nz-input-number [nzSize]="'large'" [nzMin]="1" [nzMax]="512" [nzStep]="1" [(ngModel)]="batchInput"></nz-input-number>    
+            </div>
+            <div nz-col class="gutter-row" [nzSpan]="5">
+                <h4> Loss Function </h4>
+                <nz-select [nzSize]="'large'"  [(ngModel)]="LossFunctionInput">
+                    <nz-option nzValue="mse" nzLabel="Mean Squared Error"></nz-option>
+                    <nz-option nzValue="msle" nzLabel="Mean Squared Logarithmic Error"></nz-option>
+                    <nz-option nzValue="mae" nzLabel="Mean Absolute Error"></nz-option>
+                </nz-select>
+            </div>
+
+            <div nz-col class="gutter-row" [nzSpan]="8">
+                <h4 nz-tooltip nzTooltipTitle="ADAptive Moment estimation"> Optimizers </h4>
+                <nz-select [nzSize]="'large'"  [(ngModel)]="optimizersInput">
+                    <nz-option nzValue="adam" nzLabel="Adaptive Moment Estimation(ADAM)" ></nz-option>
+                    <nz-option nzValue="nadam" nzLabel="Nesterov-accelerated ADAM (NADAM)"></nz-option>
+                    <nz-option nzValue="sgd" nzLabel="Stochastic Gradient Descent (SGD)"></nz-option>
+                </nz-select>
+            </div>
+
+
+        </div>
+
+        <div nz-row >                   
+            <div nz-col [nzSpan]="24" >
+
+                <nz-descriptions nzBordered nzSize="small" nzTitle="Model Hyperparameters">
+
+                    <nz-descriptions-item [nzSpan]="14" nzTitle="Training inputs">
+                        <nz-card >
+                        <div nz-card-grid [ngStyle]="gridStyle" *ngFor="let item of listOfSelectedValue">{{item}}</div>
+                        </nz-card>
+                    </nz-descriptions-item>
+                    <nz-descriptions-item nzTitle="Epochs">{{epochValue}}</nz-descriptions-item>
+                    <nz-descriptions-item nzTitle="Sequence length">{{sequenceValue}}</nz-descriptions-item>
+                    <nz-descriptions-item nzTitle="Batch size">{{batchValue}}</nz-descriptions-item>
+                    
+                </nz-descriptions>
+
+            </div>
+        </div>
+    </nz-card>
+    </nz-collapse-panel>
+</nz-collapse>
+
+<ng-template #extraTemplate>
+     <div class="right">
+        <button nz-button nzType="primary" (click)="train()" [nzLoading]="isTraning">
+        <i nz-icon nzType="poweroff"></i>Train!</button>
+        <button nz-button nzType="secondary" (click)="predict()" [nzLoading]="isPredicting">
+        <i nz-icon nzType="rise"></i>Predict</button>
+    </div> 
+</ng-template>
